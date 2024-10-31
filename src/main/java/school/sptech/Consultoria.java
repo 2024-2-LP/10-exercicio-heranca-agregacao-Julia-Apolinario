@@ -7,7 +7,7 @@ import school.sptech.especialistas.DesenvolvedorWeb;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consultoria extends DesenvolvedorWeb{
+public class Consultoria extends DesenvolvedorWeb {
     private String nome;
     private Integer vagas;
     private List<Desenvolvedor> desenvolvedores;
@@ -67,16 +67,52 @@ public class Consultoria extends DesenvolvedorWeb{
         }return maiorSalario;
     }
 
-//    public Desenvolvedor buscarMenorSalario(){
-//        List<Desenvolvedor> maiorSalario = new ArrayList<>();
-//        for (Desenvolvedor desenvolvedorDaVez : desenvolvedores) {
-//            if (desenvolvedorDaVez.calcularSalario() >= salario) {
-//
-//                maiorSalario.add(desenvolvedorDaVez);
-//
-//            }
-//        }return maiorSalario;
-//    }
+    public Desenvolvedor buscarMenorSalario(){
+
+        if (desenvolvedores.isEmpty()){
+            return null;
+        }
+        Desenvolvedor menorSalario = desenvolvedores.get(0);
+        for (Desenvolvedor desenvolvedorDaVez : desenvolvedores) {
+            if (desenvolvedorDaVez.calcularSalario().compareTo(menorSalario.calcularSalario()) <0 ) {
+
+                menorSalario = desenvolvedorDaVez;
+
+            }
+        }return menorSalario;
+    }
+
+    public List<Desenvolvedor> buscarPorTecnologia(String tecnologia) {
+        List<Desenvolvedor> devsComTecnologia = new ArrayList<>();
+
+        for (Desenvolvedor dev : desenvolvedores) {
+            if (dev instanceof DesenvolvedorWeb) {
+                DesenvolvedorWeb devWeb = (DesenvolvedorWeb) dev;
+                if (tecnologia.equalsIgnoreCase(devWeb.getFrontend()) || tecnologia.equalsIgnoreCase(devWeb.getBackend()) || tecnologia.equalsIgnoreCase(devWeb.getSgbd())) {
+                    devsComTecnologia.add(devWeb);
+                }
+            } else if (dev instanceof DesenvolvedorMobile) {
+                DesenvolvedorMobile devMobile = (DesenvolvedorMobile) dev;
+                if (tecnologia.equalsIgnoreCase(devMobile.getPlataforma()) || tecnologia.equalsIgnoreCase(devMobile.getLinguagem())) {
+                    devsComTecnologia.add(devMobile);
+                }
+            }
+        }
+        return devsComTecnologia;
+    }
+
+    public Double getTotalSalariosPorTecnologia(String tecnologia) {
+        Double totalSalarios = 0.0;
+
+        List<Desenvolvedor> devsComTecnologia = buscarPorTecnologia(tecnologia);
+
+        for (Desenvolvedor dev : devsComTecnologia) {
+            totalSalarios += dev.calcularSalario();
+        }
+
+        return totalSalarios;
+    }
+
 
 
 
